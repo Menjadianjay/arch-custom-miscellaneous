@@ -1,55 +1,59 @@
-# dotfiles
+  dotfiles
 
-Konfigurasi dan script pribadi untuk [Omarchy](https://omarchy.org), sebuah Arch Linux + Hyprland distro/setup buatan DHH. Repo ini menyimpan kustomisasi di atas instalasi Omarchy default: command tambahan, override konfigurasi, dan tweak workflow.
+  Personal configuration and scripts for Omarchy (https://omarchy.org), an Arch Linux + Hyprland distro/setup made by DHH. This repo stores customizations on top of a default
+  Omarchy install: extra commands, config overrides, and workflow tweaks.
 
-## Struktur
+  Structure
 
-```
-.
-├── bin/                # command/script tambahan (dipanggil lewat omarchy-menu atau langsung)
-│   └── mode            # buka app set sesuai mode kerja
-├── config/             # override untuk ~/.config (hypr, waybar, walker, dll)
-└── install.sh          # symlink/copy file ke lokasi yang sesuai
-```
+  .
+  ├── bin/                # extra commands/scripts (invoked via omarchy-menu or directly)
+  │   └── mode            # opens an app set based on work mode
+  ├── config/             # overrides for ~/.config (hypr, waybar, walker, etc.)
+  └── install.sh          # symlinks/copies files to the right locations
 
-Sesuaikan struktur di atas dengan isi repo yang sebenarnya.
+  Adjust the structure above to match the repo's actual contents.
 
-## bin/mode
+  bin/mode
 
-Script untuk membuka sekumpulan aplikasi sekaligus berdasarkan mode kerja (`code`, `relax`, `socialize`, `tetris`, `study`, `work`, `eat`), menggunakan `omarchy launch` dan `gtk-launch`.
+  Script that opens a set of applications at once based on a work mode (code, relax, socialize, tetris, study, work, eat), using omarchy launch and gtk-launch.
 
-Usage:
+  Usage:
 
-```
-mode [code|relax|socialize|tetris|study|work|eat]
-```
+  mode [code|relax|socialize|tetris|study|work|eat]
 
-Tanpa argumen, script memanggil `omarchy-menu-select` untuk memilih mode secara interaktif. Detail tiap mode (URL, aplikasi yang dibuka) di-hardcode langsung di dalam script; ubah blok `case` untuk menyesuaikan.
+  Without an argument, the script calls omarchy-menu-select to pick a mode interactively. Details for each mode (URLs, apps opened) are hardcoded directly in the script; edit the
+  case block to customize.
 
-Metadata `# omarchy:summary=` dan `# omarchy:args=` di header file dipakai Omarchy untuk menampilkan deskripsi command di menu-nya.
+  The # omarchy:summary= and # omarchy:args= metadata in the file header are used by Omarchy to display the command's description in its menu.
 
-## Ide kustomisasi lain yang mungkin diterapkan
+  Other customization ideas that could be applied
 
-Daftar berikut adalah arah teknis yang umum dilakukan di atas Omarchy, sebagai catatan untuk pengembangan repo ke depan:
+  The list below is a set of technical directions commonly taken on top of Omarchy, noted here for future development of this repo:
 
-- **Keybinding tambahan di Hyprland** (`~/.config/hypr/bindings.conf` atau sejenis): binding untuk menjalankan `bin/mode` langsung dari keyboard, binding untuk workspace switching custom, atau binding untuk script utilitas lain.
-- **Waybar module custom**: menambah modul di `~/.config/waybar/config` yang menampilkan status mode aktif (misalnya dari file state sederhana di `/tmp` atau `$XDG_RUNTIME_DIR`), status baterai/network dengan format berbeda, atau indikator custom lain via `custom/<name>` module dengan script exec.
-- **Theme/colorscheme override**: mengganti skema warna default Omarchy (biasanya di `~/.config/omarchy/current/theme` atau symlink tema) dengan tema pribadi untuk terminal, Hyprland border, dan waybar sekaligus, supaya konsisten.
-- **Autostart tambahan**: menambahkan aplikasi ke `~/.config/hypr/autostart.conf` (atau exec-once di hyprland.conf) untuk service yang selalu ingin jalan di background, terpisah dari mode manual seperti `bin/mode`.
-- **Script state/tracking**: script sederhana yang mencatat mode yang sedang aktif atau riwayat mode yang dijalankan (append ke file log) untuk keperluan tracking waktu kerja/relax.
-- **Wrapper untuk `omarchy launch`**: fungsi/alias tambahan yang membungkus `omarchy launch browser|webapp` dengan default flag tertentu (misalnya profile browser tertentu, atau window rule khusus).
-- **Rofi/Walker custom menu**: menu selection tambahan (mirip `omarchy-menu-select`) untuk kebutuhan lain di luar pemilihan mode, misalnya quick launcher untuk project folder.
-- **Window rules per mode**: aturan Hyprland (`windowrule`) untuk memposisikan otomatis jendela yang dibuka tiap mode (misalnya browser selalu di workspace tertentu saat mode `work` aktif).
-- **Integrasi notifikasi**: menambahkan `notify-send` di titik tertentu dalam script (misalnya saat mode berhasil dijalankan) untuk feedback visual tanpa harus melihat terminal.
+  - Extra Hyprland keybindings (~/.config/hypr/bindings.conf or similar): a binding to run bin/mode directly from the keyboard, a binding for custom workspace switching, or
+    bindings for other utility scripts.
+  - Custom waybar module: add a module in ~/.config/waybar/config that shows the active mode status (e.g. from a simple state file in /tmp or $XDG_RUNTIME_DIR), battery/network
+    status with a different format, or another custom indicator via a custom/<name> module with an exec script.
+  - Theme/colorscheme override: replace Omarchy's default color scheme (usually at ~/.config/omarchy/current/theme or a theme symlink) with a personal theme applied consistently
+    across terminal, Hyprland borders, and waybar.
+  - Additional autostart entries: add applications to ~/.config/hypr/autostart.conf (or exec-once in hyprland.conf) for services that should always run in the background, separate
+    from manual modes like bin/mode.
+  - State/tracking script: a simple script that records the currently active mode or a history of modes run (appended to a log file) for work/relax time tracking purposes.
+  - Wrapper for omarchy launch: an additional function/alias that wraps omarchy launch browser|webapp with certain default flags (e.g. a specific browser profile, or a special
+    window rule).
+  - Custom Rofi/Walker menu: additional selection menus (similar to omarchy-menu-select) for needs beyond mode selection, e.g. a quick launcher for project folders.
+  - Per-mode window rules: Hyprland rules (windowrule) to automatically position windows opened by each mode (e.g. the browser always on a specific workspace when work mode is
+    active).
+  - Notification integration: add notify-send at certain points in the script (e.g. when a mode runs successfully) for visual feedback without needing to check the terminal.
 
-Bagian ini bersifat catatan rencana, bukan implementasi yang sudah ada di repo; update begitu fitur benar-benar ditambahkan.
+  This section is a planning note, not something already implemented in the repo; update it once a feature is actually added.
 
-## Instalasi
+  Installation
 
-Jelaskan di sini cara symlink/copy config dari repo ke `$HOME`, misalnya via `stow` atau script `install.sh` custom, sesuai metode yang dipakai.
+  Explain here how to symlink/copy configs from the repo to $HOME, e.g. via stow or a custom install.sh script, depending on the method used.
 
-## Requirement
+  Requirements
 
-- Omarchy terpasang dan `omarchy` CLI tersedia di `$PATH`.
-- Hyprland sebagai window manager (bawaan Omarchy).
-- `gtk-launch` dan file `.desktop` untuk aplikasi GUI yang direferensikan oleh script (VS Code, WhatsApp, Discord, Tetr.io, Obsidian, dll).
+  - Omarchy installed and the omarchy CLI available on $PATH.
+  - Hyprland as the window manager (Omarchy's default).
+  - gtk-launch and .desktop files for the GUI apps referenced by the script (VS Code, WhatsApp, Discord, Tetr.io, Obsidian, etc.).
